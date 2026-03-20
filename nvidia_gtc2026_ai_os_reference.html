@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA GTC 2026 · AI 时代操作系统全景</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --nv-green: #76b900;
+  --nv-green-bright: #8fd400;
+  --nv-green-dim: rgba(118,185,0,0.10);
+  --nv-green-mid: rgba(118,185,0,0.20);
+  --nv-green-glow: rgba(118,185,0,0.35);
+
+  --bg:    #000000;
+  --bg2:   #0a0a0a;
+  --bg3:   #111111;
+  --bg4:   #181818;
+  --bg5:   #1e1e1e;
+
+  --border:       rgba(118,185,0,0.12);
+  --border-hover: rgba(118,185,0,0.30);
+  --border-dim:   rgba(255,255,255,0.06);
+
+  --text:      #ffffff;
+  --text-sub:  #c8c8c8;
+  --text-muted:#888888;
+  --text-dim:  #444444;
+
+  --layer-top:  var(--nv-green);
+  --layer-2:    #5a9000;
+  --layer-3:    #3d6600;
+  --layer-4:    #2a4700;
+  --layer-bot:  #1a2d00;
+
+  --sans: 'Barlow', 'Noto Sans SC', sans-serif;
+  --cond: 'Barlow Condensed', 'Noto Sans SC', sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.6;
+  min-height:100vh;
+  padding-bottom:80px;
+}
+
+/* ── TOPBAR ─────────────────────────────── */
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:14px 40px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+  position:sticky;top:0;z-index:100;
+}
+.nv-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-shrink:0;
+}
+.nv-eye{
+  width:28px;height:28px;
+  /* NVIDIA eye/triangle mark in green */
+}
+.nv-wordmark{
+  font-family:var(--cond);
+  font-size:17px;
+  font-weight:700;
+  letter-spacing:0.06em;
+  color:var(--text);
+  text-transform:uppercase;
+}
+.nv-wordmark span{color:var(--nv-green);}
+.topbar-divider{width:1px;height:24px;background:var(--border-dim);flex-shrink:0;}
+.topbar-label{
+  font-family:var(--cond);
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+.topbar-tag{
+  margin-left:auto;
+  font-family:var(--cond);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:4px 10px;
+  border:1px solid var(--nv-green);
+  color:var(--nv-green);
+  border-radius:2px;
+}
+
+/* ── HERO ───────────────────────────────── */
+.hero{
+  padding:56px 40px 44px;
+  border-bottom:1px solid var(--border-dim);
+  position:relative;
+  overflow:hidden;
+}
+/* scanline bg texture */
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(118,185,0,0.015) 3px,
+    rgba(118,185,0,0.015) 4px
+  );
+  pointer-events:none;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  top:-100px;left:-60px;
+  width:600px;height:400px;
+  background:radial-gradient(ellipse at center, rgba(118,185,0,0.08) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-family:var(--cond);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--nv-green);
+  margin-bottom:18px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.hero-eyebrow::before{
+  content:'';
+  display:inline-block;
+  width:28px;height:2px;
+  background:var(--nv-green);
+  flex-shrink:0;
+}
+.hero-title{
+  font-family:var(--cond);
+  font-size:46px;
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-0.01em;
+  color:var(--text);
+  margin-bottom:14px;
+  position:relative;
+}
+.hero-title .hl{color:var(--nv-green);}
+.hero-sub{
+  font-size:14px;
+  color:var(--text-muted);
+  max-width:640px;
+  line-height:1.75;
+  position:relative;
+}
+.hero-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0;
+  margin-top:40px;
+  border:1px solid var(--border);
+  border-radius:4px;
+  overflow:hidden;
+  max-width:760px;
+  position:relative;
+}
+.stat{
+  flex:1;
+  min-width:120px;
+  padding:18px 22px;
+  border-right:1px solid var(--border);
+  position:relative;
+}
+.stat:last-child{border-right:none;}
+.stat::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:var(--nv-green);
+  opacity:0;
+  transition:opacity 0.2s;
+}
+.stat:hover::before{opacity:1;}
+.stat-val{
+  font-family:var(--cond);
+  font-size:28px;
+  font-weight:700;
+  color:var(--nv-green);
+  line-height:1;
+  margin-bottom:6px;
+  letter-spacing:-0.02em;
+}
+.stat-key{
+  font-family:var(--cond);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+}
+
+/* ── MAIN ───────────────────────────────── */
+.main{
+  max-width:1000px;
+  margin:0 auto;
+  padding:0 40px;
+}
+
+/* ── SECTION HEADER ─────────────────────── */
+.sec-head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:36px 0 12px;
+}
+.sec-head-bar{
+  width:3px;
+  height:18px;
+  background:var(--nv-green);
+  flex-shrink:0;
+  border-radius:1px;
+}
+.sec-head-label{
+  font-family:var(--cond);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+.sec-head-line{
+  flex:1;
+  height:1px;
+  background:var(--border-dim);
+}
+.sec-head-tag{
+  font-family:var(--cond);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--nv-green);
+  padding:3px 8px;
+  border:1px solid var(--border);
+  border-radius:2px;
+}
+
+/* ── LAYER ROW ──────────────────────────── */
+.layer{
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  padding:16px 0;
+  border-bottom:1px solid var(--border-dim);
+  animation:fadeUp 0.4s ease both;
+}
+.layer:nth-child(1){animation-delay:0.05s}
+.layer:nth-child(2){animation-delay:0.10s}
+.layer:nth-child(3){animation-delay:0.14s}
+.layer:nth-child(4){animation-delay:0.18s}
+.layer:nth-child(5){animation-delay:0.22s}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.layer-label{
+  width:108px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:4px;
+  padding-right:18px;
+  position:relative;
+}
+.layer-label::after{
+  content:'';
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:1px;
+  background:linear-gradient(to bottom, transparent, var(--border-dim) 20%, var(--border-dim) 80%, transparent);
+}
+.layer-cn{
+  font-family:var(--cond);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0.04em;
+  color:var(--text-muted);
+  text-transform:uppercase;
+}
+.layer-en{
+  font-size:10px;
+  color:var(--text-dim);
+  letter-spacing:0.06em;
+}
+.layer-pill{
+  display:inline-block;
+  margin-top:5px;
+  padding:2px 7px;
+  border-radius:2px;
+  font-family:var(--cond);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  width:fit-content;
+}
+
+/* ── CARDS ──────────────────────────────── */
+.cards{
+  flex:1;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding-left:18px;
+}
+
+.card{
+  flex:1;
+  min-width:150px;
+  border:1px solid var(--border-dim);
+  border-radius:3px;
+  padding:16px 18px;
+  cursor:pointer;
+  transition:all 0.16s ease;
+  background:var(--bg2);
+  position:relative;
+  overflow:hidden;
+}
+.card::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:2px;
+  background:var(--nv-green);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.2s ease;
+}
+.card:hover{
+  border-color:var(--border-hover);
+  background:var(--bg3);
+}
+.card:hover::after{transform:scaleX(1);}
+.card.active{
+  border-color:var(--nv-green);
+  background:var(--bg3);
+  box-shadow:0 0 0 1px rgba(118,185,0,0.15), inset 0 0 30px rgba(118,185,0,0.04);
+}
+.card.active::after{transform:scaleX(1);}
+
+.card-icon{
+  font-size:18px;
+  margin-bottom:10px;
+  display:block;
+  filter:grayscale(1) brightness(0.6);
+  transition:filter 0.18s;
+}
+.card:hover .card-icon,
+.card.active .card-icon{filter:none;}
+
+.card-name{
+  font-family:var(--cond);
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:0.02em;
+  color:var(--text);
+  line-height:1.25;
+  margin-bottom:5px;
+}
+.card-sub{
+  font-size:11px;
+  color:var(--text-dim);
+  line-height:1.45;
+}
+.card.active .card-sub{color:var(--text-muted);}
+.card-caret{
+  position:absolute;
+  bottom:13px;right:14px;
+  font-family:var(--cond);
+  font-size:13px;
+  color:var(--text-dim);
+  transition:all 0.16s;
+  font-weight:600;
+}
+.card:hover .card-caret,
+.card.active .card-caret{color:var(--nv-green);}
+
+/* ── DETAIL PANEL ───────────────────────── */
+.detail-wrap{
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  transition:max-height 0.36s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease;
+}
+.detail-wrap.open{
+  max-height:750px;
+  opacity:1;
+}
+.detail{
+  margin:4px 0 12px;
+  border:1px solid var(--border);
+  border-left:3px solid var(--nv-green);
+  border-radius:3px;
+  overflow:hidden;
+  background:var(--bg2);
+}
+.detail-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 22px;
+  border-bottom:1px solid var(--border-dim);
+  background:linear-gradient(90deg, rgba(118,185,0,0.06) 0%, transparent 60%);
+}
+.d-icon{font-size:20px;flex-shrink:0;}
+.d-title{
+  font-family:var(--cond);
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:0.02em;
+  color:var(--text);
+}
+.d-tag{
+  margin-left:auto;
+  flex-shrink:0;
+  font-family:var(--cond);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:3px 9px;
+  border:1px solid var(--nv-green);
+  color:var(--nv-green);
+  border-radius:2px;
+  background:var(--nv-green-dim);
+}
+.detail-body{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.d-col{padding:20px 22px;}
+.d-col:first-child{border-right:1px solid var(--border-dim);}
+
+.d-section{margin-bottom:18px;}
+.d-section:last-child{margin-bottom:0;}
+.d-label{
+  font-family:var(--cond);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--nv-green);
+  margin-bottom:8px;
+  opacity:0.8;
+}
+.d-text{
+  font-size:12.5px;
+  color:var(--text-muted);
+  line-height:1.75;
+}
+.d-text strong{
+  color:var(--text);
+  font-weight:600;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+.chip{
+  font-family:var(--cond);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:0.04em;
+  padding:3px 9px;
+  border-radius:2px;
+  background:var(--bg4);
+  border:1px solid var(--border-dim);
+  color:var(--text-muted);
+  white-space:nowrap;
+}
+.chip.g{
+  background:var(--nv-green-dim);
+  border-color:rgba(118,185,0,0.35);
+  color:var(--nv-green-bright);
+}
+
+.qblock{
+  border-left:2px solid var(--nv-green);
+  padding:10px 14px;
+  background:rgba(118,185,0,0.04);
+  border-radius:0 3px 3px 0;
+  margin-top:4px;
+}
+.qblock p{
+  font-size:12px;
+  color:var(--text-muted);
+  line-height:1.65;
+  font-style:italic;
+}
+.qblock cite{
+  display:block;
+  font-size:10px;
+  color:var(--nv-green);
+  margin-top:6px;
+  font-style:normal;
+  font-family:var(--cond);
+  font-weight:500;
+  letter-spacing:0.04em;
+  opacity:0.7;
+}
+
+/* ── FOOTER ─────────────────────────────── */
+.footer{
+  max-width:1000px;
+  margin:48px auto 0;
+  padding:20px 40px;
+  border-top:1px solid var(--border-dim);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.footer-l{
+  font-family:var(--cond);
+  font-size:11px;
+  letter-spacing:0.06em;
+  color:var(--text-dim);
+  text-transform:uppercase;
+}
+.footer-l span{color:var(--nv-green);}
+.footer-r{font-size:11px;color:var(--text-dim);}
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media(max-width:680px){
+  .topbar{padding:12px 16px;}
+  .hero{padding:36px 16px 28px;}
+  .hero-title{font-size:32px;}
+  .main{padding:0 16px;}
+  .layer{flex-direction:column;}
+  .layer-label{width:100%;flex-direction:row;gap:10px;padding:0 0 10px;border-bottom:1px solid var(--border-dim);}
+  .layer-label::after{display:none;}
+  .cards{padding-left:0;}
+  .card{min-width:130px;}
+  .detail-body{grid-template-columns:1fr;}
+  .d-col:first-child{border-right:none;border-bottom:1px solid var(--border-dim);}
+  .hero-stats{flex-wrap:wrap;}
+  .stat{min-width:45%;}
+  .footer{padding:16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="nv-logo">
+    <svg class="nv-eye" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 4C8.477 4 4 8.477 4 14C4 19.523 8.477 24 14 24C19.523 24 24 19.523 24 14C24 8.477 19.523 4 14 4Z" fill="#76b900" opacity="0.15"/>
+      <path d="M10 10H13.5V14.5L18 10V18H14.5V13.5L10 18V10Z" fill="#76b900"/>
+    </svg>
+    <span class="nv-wordmark">NVIDIA<span> GTC 2026</span></span>
+  </div>
+  <div class="topbar-divider"></div>
+  <span class="topbar-label">AI 时代操作系统全景参考</span>
+  <span class="topbar-tag">March 16–19, 2026</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Jensen Huang Keynote · SAP Center, San Jose</div>
+  <h1 class="hero-title">
+    <span class="hl">NVIDIA</span> 的下一盘棋<br>AI 时代的"操作系统"
+  </h1>
+  <p class="hero-sub">从硅芯片到智能体，从推理引擎到物理机器人——完整覆盖 GTC 2026 五层全栈架构、十三大核心模块。<br>基于 NVIDIA Newsroom · CNBC · Tom's Hardware · Data Center Knowledge 权威来源。</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-val">$1T</div><div class="stat-key">2027 订单能见度</div></div>
+    <div class="stat"><div class="stat-val">7</div><div class="stat-key">Vera Rubin 全新芯片</div></div>
+    <div class="stat"><div class="stat-val">350×</div><div class="stat-key">Token 吞吐提升</div></div>
+    <div class="stat"><div class="stat-val">30,000+</div><div class="stat-key">190 国与会者</div></div>
+    <div class="stat"><div class="stat-val">20 yr</div><div class="stat-key">CUDA 生态纪念</div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- APPLICATION LAYER -->
+  <div class="sec-head">
+    <div class="sec-head-bar"></div>
+    <span class="sec-head-label">▲ 应用价值层</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-tag">Applications</span>
+  </div>
+  <div class="layer" id="layer-app">
+    <div class="layer-label">
+      <span class="layer-cn">应用层</span>
+      <span class="layer-en">Applications</span>
+      <span class="layer-pill" style="background:rgba(118,185,0,0.12);color:#76b900;border:1px solid rgba(118,185,0,0.3)">顶层</span>
+    </div>
+    <div class="cards">
+      <div class="card" data-key="physical"><span class="card-icon">🤖</span><div class="card-name">物理 AI</div><div class="card-sub">机器人 · 自动驾驶 · 工业</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="digital"><span class="card-icon">🏥</span><div class="card-name">数字 AI</div><div class="card-sub">医疗 · 金融 · 零售 · 制药</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="consumer"><span class="card-icon">🎮</span><div class="card-name">消费级 AI</div><div class="card-sub">GeForce · DLSS 5 · 本地智能体</div><span class="card-caret">›</span></div>
+    </div>
+  </div>
+  <div class="detail-wrap" id="detail-app"><div class="detail" id="detail-app-inner"></div></div>
+
+  <!-- AGENT LAYER -->
+  <div class="sec-head">
+    <div class="sec-head-bar"></div>
+    <span class="sec-head-label">智能体层 · 最热焦点</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-tag">Agentic AI</span>
+  </div>
+  <div class="layer" id="layer-agent">
+    <div class="layer-label">
+      <span class="layer-cn">智能体层</span>
+      <span class="layer-en">Agentic AI</span>
+      <span class="layer-pill" style="background:rgba(118,185,0,0.12);color:#8fd400;border:1px solid rgba(143,212,0,0.3)">热点</span>
+    </div>
+    <div class="cards">
+      <div class="card" data-key="openclaw"><span class="card-icon">⚡</span><div class="card-name">OpenClaw 平台</div><div class="card-sub">智能体 OS · 史上最快增长开源项目</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="nemoclaw"><span class="card-icon">🔒</span><div class="card-name">NemoClaw</div><div class="card-sub">企业级安全智能体栈 · 一键部署</div><span class="card-caret">›</span></div>
+    </div>
+  </div>
+  <div class="detail-wrap" id="detail-agent"><div class="detail" id="detail-agent-inner"></div></div>
+
+  <!-- INTELLIGENCE LAYER -->
+  <div class="sec-head">
+    <div class="sec-head-bar"></div>
+    <span class="sec-head-label">推理层 · 拐点已至</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-tag">Intelligence</span>
+  </div>
+  <div class="layer" id="layer-intel">
+    <div class="layer-label">
+      <span class="layer-cn">推理层</span>
+      <span class="layer-en">Intelligence</span>
+      <span class="layer-pill" style="background:rgba(118,185,0,0.12);color:#6aa300;border:1px solid rgba(106,163,0,0.3)">核心</span>
+    </div>
+    <div class="cards">
+      <div class="card" data-key="inference"><span class="card-icon">📈</span><div class="card-name">推理引擎 ▲</div><div class="card-sub">AI 商业化驱动力 · 350× 吞吐跃迁</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="training"><span class="card-icon">🧠</span><div class="card-name">模型训练</div><div class="card-sub">Blackwell 集群 · 80% 全球市占率</div><span class="card-caret">›</span></div>
+    </div>
+  </div>
+  <div class="detail-wrap" id="detail-intel"><div class="detail" id="detail-intel-inner"></div></div>
+
+  <!-- PLATFORM LAYER -->
+  <div class="sec-head">
+    <div class="sec-head-bar"></div>
+    <span class="sec-head-label">平台层 · 软件护城河</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-tag">Platform</span>
+  </div>
+  <div class="layer" id="layer-platform">
+    <div class="layer-label">
+      <span class="layer-cn">平台层</span>
+      <span class="layer-en">Platform</span>
+      <span class="layer-pill" style="background:rgba(118,185,0,0.08);color:#558800;border:1px solid rgba(85,136,0,0.3)">护城河</span>
+    </div>
+    <div class="cards">
+      <div class="card" data-key="cuda"><span class="card-icon">⚙️</span><div class="card-name">CUDA 生态</div><div class="card-sub">20 年飞轮 · 最深生态锁定</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="nemo"><span class="card-icon">🌐</span><div class="card-name">NeMo · Nemotron</div><div class="card-sub">开放模型生态 · Nemotron Coalition</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="omniverse"><span class="card-icon">🌍</span><div class="card-name">Omniverse · DSX</div><div class="card-sub">物理仿真 · AI 工厂数字孪生</div><span class="card-caret">›</span></div>
+    </div>
+  </div>
+  <div class="detail-wrap" id="detail-platform"><div class="detail" id="detail-platform-inner"></div></div>
+
+  <!-- HARDWARE LAYER -->
+  <div class="sec-head">
+    <div class="sec-head-bar"></div>
+    <span class="sec-head-label">▼ 算力底座 · 硬件层</span>
+    <div class="sec-head-line"></div>
+    <span class="sec-head-tag">Hardware</span>
+  </div>
+  <div class="layer" id="layer-hw">
+    <div class="layer-label">
+      <span class="layer-cn">硬件层</span>
+      <span class="layer-en">Hardware</span>
+      <span class="layer-pill" style="background:rgba(118,185,0,0.06);color:#3d6600;border:1px solid rgba(61,102,0,0.4)">底座</span>
+    </div>
+    <div class="cards">
+      <div class="card" data-key="gpu"><span class="card-icon">💎</span><div class="card-name">GPU 路线图</div><div class="card-sub">Blackwell→Rubin→Kyber→Feynman</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="groq"><span class="card-icon">⚡</span><div class="card-name">Groq LPU</div><div class="card-sub">$200 亿收购 · 推理专用芯片</div><span class="card-caret">›</span></div>
+      <div class="card" data-key="nvlink"><span class="card-icon">🔗</span><div class="card-name">NVLink 互联</div><div class="card-sub">AI 工厂神经系统 · NVLink 6</div><span class="card-caret">›</span></div>
+    </div>
+  </div>
+  <div class="detail-wrap" id="detail-hw"><div class="detail" id="detail-hw-inner"></div></div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  <div class="footer-l"><span>NVIDIA GTC 2026</span> · March 16–19 · San Jose, CA</div>
+  <div class="footer-r">Sources: NVIDIA Newsroom · CNBC · Tom's Hardware · Data Center Knowledge</div>
+</div>
+
+<script>
+const DATA = {
+  physical:{
+    icon:'🤖', title:'物理 AI', tag:'应用层',
+    col1:[
+      {label:'自动驾驶', html:`<p class="d-text"><strong>Uber</strong> 将基于 Nvidia Drive AV，于 2028 年在 <strong>4 大洲 28 座城市</strong>部署自动驾驶车队，首站洛杉矶与旧金山（2027 年启动）。<br><br><strong>BYD · 现代 · 日产 · 吉利</strong> 均加入 Nvidia RoboTaxi 平台，量产 Level 4 自动驾驶；五十铃与中国 Tier IV 基于 <strong>Nvidia AGX Thor</strong> 开发自动驾驶公共汽车。</p>`},
+      {label:'开放模型家族', html:`<div class="chips"><span class="chip g">Alpamayo · 自动驾驶</span><span class="chip g">Isaac GR00T · 通用机器人</span><span class="chip g">Cosmos · 世界模型</span><span class="chip">Cosmos-H · 医疗机器人</span></div>`}
+    ],
+    col2:[
+      {label:'GTC 现场 · 机器人时刻', html:`<p class="d-text"><strong>迪士尼 Olaf 机器人</strong>亮相主舞台——由 Nvidia Jetson 芯片、Newton 物理引擎、Omniverse Kamino 仿真协同驱动。单 GPU 并行运行<strong>数千个</strong>物理仿真，机器人<strong>数小时</strong>内完成复杂行为学习（非数月）。<br><br>GTC 展馆同期部署 <strong>110 台真实机器人</strong>，全球四大工业机器人厂商合作均已确认。</p>`},
+      {label:'黄仁勋', html:`<div class="qblock"><p>"Physical AI is the next wave — robots that can learn in simulation and deploy in the real world."</p><cite>— Jensen Huang, GTC 2026 Keynote</cite></div>`}
+    ]
+  },
+  digital:{
+    icon:'🏥', title:'数字 AI', tag:'应用层',
+    col1:[
+      {label:'医疗健康', html:`<p class="d-text">医疗行业 AI 部署速度是整体经济的 <strong>2 倍以上</strong>，市场规模 <strong>$4.9 万亿</strong>。<br><br>· <strong>IQVIA</strong>：IQVIA.ai 统一智能体平台，已部署超 <strong>150 个专属智能体</strong>用于临床试验选址<br>· <strong>Hippocratic AI</strong>：患者端慢性病智能体与出院后随访系统<br>· <strong>HeidiHealth</strong>：每周 <strong>240 万次</strong>多语种临床记录，覆盖 190 国</p>`},
+      {label:'生命科学', html:`<p class="d-text">AI 模型已从结构预测演进至<strong>复杂蛋白质相互作用模拟</strong>，开启"生物推理"新时代。罗氏（Roche）与礼来（Lilly）正以制药行业前所未有的力度投入 AI 基础设施。</p>`}
+    ],
+    col2:[
+      {label:'企业智能体应用', html:`<p class="d-text"><strong>IBM WatsonX × Nvidia</strong>：可在数分钟内刷新全球运营数据。<br><br>Nvidia 与 OpenAI 合作推出 <strong>AI 零售购物智能体蓝图</strong>，将智能体直接嵌入商业采购闭环，从 SaaS 切换至 AGaaS（智能体即服务）。</p>`},
+      {label:'行业判断', html:`<div class="qblock"><p>"The transformer moment is now for biology and drug discovery."</p><cite>— Kimberly Powell, VP Healthcare, NVIDIA · GTC 2026</cite></div>`}
+    ]
+  },
+  consumer:{
+    icon:'🎮', title:'消费级 AI · GeForce', tag:'应用层',
+    col1:[
+      {label:'DLSS 5 · 神经渲染革命', html:`<p class="d-text">黄仁勋称 DLSS 5 为<strong>自实时光线追踪以来最大图形突破</strong>——3D 引导神经渲染在本地硬件实现电影级 4K 画质，彻底重新定义"渲染"。<br><br><strong>今秋支持</strong>：Bethesda · 育碧 · Capcom · 腾讯</p>`},
+      {label:'GeForce 战略意义', html:`<div class="qblock"><p>"GeForce is Nvidia's greatest marketing campaign — it's what brought CUDA to the world."</p><cite>— Jensen Huang · CUDA 飞轮始于 GeForce</cite></div>`}
+    ],
+    col2:[
+      {label:'本地 AI 计算设备', html:`<p class="d-text"><strong>DGX Station</strong>：GB300 Grace Blackwell Ultra，748GB 统一内存，20 PFLOPS，本地运行万亿参数级开源模型。<br><br><strong>DGX Spark</strong>：支持最多 4 节点集群，"桌面数据中心"，近线性性能扩展。</p>`},
+      {label:'消费者端 OpenClaw', html:`<p class="d-text">GeForce RTX PC 与 DGX Spark 均可在<strong>本地免费</strong>运行 OpenClaw 智能体，无 Token 成本、数据不离开设备。<br><br>Nvidia 将此定义为 <strong>"Personal Agent Computer"</strong> 新品类，与 PC / 智能手机并列。</p>`}
+    ]
+  },
+  openclaw:{
+    icon:'⚡', title:'OpenClaw 平台', tag:'智能体层',
+    col1:[
+      {label:'什么是 OpenClaw', html:`<p class="d-text">由奥地利开发者 <strong>Peter Steinberger</strong> 创建，现由 OpenAI 作为开源项目持续维护。黄仁勋称其为<strong>"人类历史上增长最快的开源项目"</strong>，超越 Linux 30 年的采用速度，在数周内完成同等规模扩散。</p>`},
+      {label:'OpenClaw 的 7 大原语（OS 级别）', html:`<div class="chips"><span class="chip g">资源管理</span><span class="chip g">工具访问</span><span class="chip g">文件系统</span><span class="chip g">LLM 连接</span><span class="chip g">调度 / Cron</span><span class="chip g">问题分解</span><span class="chip g">子智能体生成</span></div><p class="d-text" style="margin-top:10px">黄仁勋："我刚刚用描述操作系统的语法，完整描述了 OpenClaw。"</p>`}
+    ],
+    col2:[
+      {label:'时代坐标', html:`<div class="chips" style="margin-bottom:10px"><span class="chip">Linux → 开源 OS</span><span class="chip">HTTP → 互联网规则</span><span class="chip">Kubernetes → 云原生编排</span><span class="chip g">OpenClaw → 智能体计算 OS</span></div><p class="d-text">每一个都定义了一个计算时代的基础规则。</p>`},
+      {label:'黄仁勋原话', html:`<div class="qblock"><p>"Every single company in the world today has to have an OpenClaw strategy."</p><cite>— Jensen Huang, GTC 2026</cite></div><div class="qblock" style="margin-top:8px"><p>"OpenClaw has open-sourced the operating system of agentic computers."</p><cite>— Jensen Huang, GTC 2026</cite></div>`}
+    ]
+  },
+  nemoclaw:{
+    icon:'🔒', title:'NemoClaw · 企业智能体栈', tag:'智能体层',
+    col1:[
+      {label:'三层企业安全架构', html:`<p class="d-text">NemoClaw 是 OpenClaw 的企业级参考设计，解决"智能体可访问员工档案、供应链数据、财务信息并向外通信"的安全真空：</p><div class="chips" style="margin-top:8px"><span class="chip g">OpenShell 运行时沙箱</span><span class="chip g">隐私路由器</span><span class="chip g">网络防护栏</span></div>`},
+      {label:'部署方式', html:`<p class="d-text"><strong>单命令安装</strong>，捆绑 Nemotron 本地模型 + OpenShell 运行时。<br><br>支持平台：GeForce RTX · RTX PRO 工作站 · DGX Spark · DGX Station · 云端<br><br>每个 SaaS 提供商可将自己的策略引擎接入 NemoClaw 层，无需重写智能体本身。</p>`}
+    ],
+    col2:[
+      {label:'三个大胆预言', html:`<p class="d-text">1. 每家 SaaS 公司将转型为 <strong>AGaaS（智能体即服务）</strong> 公司<br><br>2. 每位工程师未来将拥有<strong>年度 Token 预算</strong>（与薪资并列）<br><br>3. 全球将出现 <strong>1000 万个数字工人</strong>与人类协同工作</p>`},
+      {label:'当下实证', html:`<div class="qblock"><p>"100% of Nvidia engineers are using Claude Code and other agent coding tools."</p><cite>— Jensen Huang, GTC 2026 · Nvidia 已率先全员进入智能体工作流</cite></div>`}
+    ]
+  },
+  inference:{
+    icon:'📈', title:'推理引擎 · 拐点时刻', tag:'推理层',
+    col1:[
+      {label:'黄仁勋核心判断', html:`<div class="qblock"><p>"AI now has to think — to think, it has to inference. AI now has to do — to do, it has to inference. It's way past training now."</p><cite>— Jensen Huang, GTC 2026</cite></div>`},
+      {label:'吞吐量跃迁', html:`<p class="d-text">单个 <strong>1GW AI 工厂</strong> Token 生产能力：</p><div class="chips" style="margin-top:8px"><span class="chip">Hopper · 200 万 tokens/秒</span><span class="chip g">Vera Rubin · 7 亿 tokens/秒</span></div><p class="d-text" style="margin-top:8px">提升 <strong>350 倍</strong>，Token 成本降低 <strong>10 倍</strong>。</p>`}
+    ],
+    col2:[
+      {label:'Dynamo 1.0 · 推理操作系统', html:`<p class="d-text">开源推理引擎 <strong>Dynamo 1.0</strong> 正式发布，定位"AI 工厂的操作系统"——将 Blackwell GPU 推理性能提升最高 <strong>7 倍</strong>，大幅降低 Token 成本，已进入生产部署。</p>`},
+      {label:'商业规模测算', html:`<p class="d-text">黄仁勋用 1GW 假想工厂展示：<br>· 纯 Vera Rubin：年收益基准 X<br>· Vera Rubin + Groq LPX：年收益 <strong>$3000 亿</strong>（2× Vera Rubin，10× Blackwell）<br>· 新增"超级服务"层，进一步拓宽变现空间</p>`}
+    ]
+  },
+  training:{
+    icon:'🧠', title:'模型训练', tag:'推理层',
+    col1:[
+      {label:'市场地位', html:`<p class="d-text">Nvidia 在 AI <strong>训练市场约 80% 份额</strong>。Nvidia + Anthropic + Meta SL 共同承担全球约<strong>三分之一</strong>的 AI 算力。<br><br>Blackwell NVL72（72 GPU 单体系统）已在市场全面验证——被称为"AI 基础设施巨大赌注的胜利"。</p>`},
+      {label:'Vera Rubin 训练效率', html:`<div class="chips"><span class="chip g">MoE 训练 GPU 减少 4×</span><span class="chip g">训练吞吐 10×/W vs Blackwell</span><span class="chip">安装时间 2天 → 2小时</span><span class="chip">1.3 百万组件/机架</span></div>`}
+    ],
+    col2:[
+      {label:'前沿实验室背书', html:`<div class="qblock"><p>"NVIDIA's Vera Rubin platform gives us the compute, networking and system design to keep delivering while advancing the safety and reliability our customers depend on."</p><cite>— Dario Amodei, CEO of Anthropic</cite></div><div class="qblock" style="margin-top:8px"><p>"With NVIDIA Vera Rubin, we'll run more powerful models and agents at massive scale."</p><cite>— Sam Altman, CEO of OpenAI</cite></div>`},
+      {label:'云厂商承诺', html:`<p class="d-text"><strong>AWS</strong>：今年起全球部署超 <strong>100 万个 Nvidia GPU</strong>，含 Blackwell + Rubin + Groq 全栈。<br><br>Vera Rubin NVL72 首个部署：<strong>Microsoft Azure</strong>（已在运行）。<br><br>确认 H2 2026 交付：AWS · GCP · Azure · Oracle · CoreWeave · Lambda 等</p>`}
+    ]
+  },
+  cuda:{
+    icon:'⚙️', title:'CUDA 生态 · 20 周年', tag:'平台层',
+    col1:[
+      {label:'20 年飞轮效应', html:`<p class="d-text">CUDA 2025 年迎来 <strong>20 周年</strong>——黄仁勋定义的 Nvidia 最深护城河：开发者 → CUDA 开发 → 更多硬件采购 → 更多开发者……<br><br>反直觉结果：<strong>旧一代 Ampere 芯片在云端价格反而上涨</strong>——生态锁定的力量远超硬件本身。</p>`},
+      {label:'覆盖范围', html:`<div class="chips"><span class="chip g">每家主流云厂商</span><span class="chip g">每个行业</span><span class="chip">数百万开发者</span></div><div class="qblock" style="margin-top:10px"><p>"The single hardest thing is to have built up our install base — we're in every cloud and computer company, in every single industry."</p><cite>— Jensen Huang</cite></div>`}
+    ],
+    col2:[
+      {label:'GTC 2026 新增库', html:`<div class="chips"><span class="chip g">cuVS · 向量搜索加速</span><span class="chip g">cuDF · 数据处理加速</span><span class="chip g">CUDA-X · 跨域加速库</span></div><p class="d-text" style="margin-top:10px">覆盖场景：向量数据库 · 药物研发 · 气候模拟 · 金融建模 · 科学计算</p>`},
+      {label:'战略本质', html:`<p class="d-text">CUDA 使 Nvidia 成为唯一能在<strong>每个 AI 领域、每种 AI 模型</strong>上运行的公司。这是 Vera Rubin 能让客户"完全有信心构建"的底层原因——不只是芯片，是生态系统。</p>`}
+    ]
+  },
+  nemo:{
+    icon:'🌐', title:'NeMo · Nemotron Coalition', tag:'平台层',
+    col1:[
+      {label:'Nemotron Coalition · 6 大模型家族', html:`<div class="chips"><span class="chip g">Nemotron · 语言 & 推理</span><span class="chip g">Cosmos · 世界 & 视觉</span><span class="chip g">Isaac GR00T · 通用机器人</span><span class="chip g">Alpamayo · 自动驾驶</span><span class="chip">Earth-2 · 气候预测</span><span class="chip">BioNemo · 生物科学</span></div><div class="chips" style="margin-top:6px"><span class="chip">Mistral AI</span><span class="chip">Perplexity</span><span class="chip">Cursor</span><span class="chip">Black Forest Labs</span><span class="chip">LangChain</span><span class="chip">Adobe</span><span class="chip">IBM</span></div>`},
+      {label:'新基准 PinchBench', html:`<p class="d-text">Nvidia 推出 <strong>PinchBench</strong>——专门衡量 LLM 在 OpenClaw 场景下智能体能力的评测基准，取代通用 LLM 排行榜，成为智能体时代的新标准。</p>`}
+    ],
+    col2:[
+      {label:'Nemotron 3 模型家族', html:`<p class="d-text"><strong>Nemotron 3 Super（120B）</strong><br>12B 活跃参数，PinchBench 得分 <strong>85.6%</strong>，同级开源模型最佳，适合 DGX Spark / RTX PRO 运行复杂智能体。<br><br><strong>Nemotron 3 Nano（4B）</strong><br>为 GeForce RTX 优化，本地轻量运行个人智能体助手，零 Token 成本。</p>`},
+      {label:'开放生态战略', html:`<p class="d-text">类比 Meta 的 Llama 策略：通过开源模型建立开发者生态，确保所有部署都深度依赖 Nvidia 硬件基础设施——<strong>模型开放，算力锁定</strong>。</p>`}
+    ]
+  },
+  omniverse:{
+    icon:'🌍', title:'Omniverse · DSX · 数字孪生', tag:'平台层',
+    col1:[
+      {label:'Omniverse · 物理世界仿真', html:`<p class="d-text">物理 AI 的仿真基础设施——机器人、自动驾驶、工业设备在真实部署前，先在 Omniverse 中大规模虚拟训练与验证。<br><br>Disney Olaf 机器人背后的 <strong>Kamino 仿真引擎</strong>构建于 Omniverse Warp 框架，单 GPU 并行运行<strong>数千个</strong>物理仿真。</p>`},
+      {label:'供应链协同设计', html:`<p class="d-text">Nvidia 利用 Omniverse 让全球供应商在<strong>虚拟环境中协同进行数据中心级联合设计</strong>，大幅提升协作规模与效率，无需实体样品与现场会议。</p>`}
+    ],
+    col2:[
+      {label:'DSX · 吉瓦级 AI 工厂管理', html:`<p class="d-text"><strong>NVIDIA DSX</strong>（数字孪生工厂管理平台）：专为设计、仿真和运营<strong>吉瓦（GW）级别 AI 工厂</strong>构建。包含 Max-Q 动态功耗管理（提升 30% 基础设施效率）、智能热管理与全生命周期监控。</p>`},
+      {label:'新一代存储架构', html:`<div class="chips"><span class="chip g">BlueField-4 STX · AI 原生存储</span><span class="chip g">4× 性能/瓦特</span><span class="chip">256 Vera CPU 液冷机架</span></div><p class="d-text" style="margin-top:8px">强化学习与智能体 AI 工作负载依赖大量 CPU 环境验证模型输出，Vera CPU Rack 专为此场景设计。</p>`}
+    ]
+  },
+  gpu:{
+    icon:'💎', title:'GPU 加速器 · 四代路线图', tag:'硬件层',
+    col1:[
+      {label:'Vera Rubin · 核心规格', html:`<div class="chips"><span class="chip g">TSMC 3nm · 3360 亿晶体管</span><span class="chip g">288GB HBM4 / GPU</span><span class="chip g">22 TB/s 内存带宽</span><span class="chip g">50 PFLOPS NVFP4</span></div><p class="d-text" style="margin-top:10px"><strong>NVL72 机架</strong>：72 Rubin GPU + 36 Vera CPU，液冷，<strong>3.6 ExaFLOPS</strong> 推理算力，安装时间 2天 → <strong>2小时</strong>。<br><br><strong>Vera CPU</strong>：88 Olympus 核心，Armv9.2，能效 <strong>2×</strong> x86，内存带宽/核 <strong>3×</strong> x86。</p>`},
+      {label:'首批部署确认', html:`<p class="d-text">Microsoft Azure <strong>已在运行</strong> Vera Rubin NVL72 系统（首个超大规模云部署）。H2 2026 确认交付：AWS · GCP · Azure · Oracle · CoreWeave · Lambda 等。</p>`}
+    ],
+    col2:[
+      {label:'四代芯片路线图', html:`<p class="d-text"><strong>现在 · Blackwell</strong>（RTX 50 系列，已量产）<br><strong>2026 H2 · Vera Rubin</strong>（数据中心，消费级 2027）<br><strong>2027 · Kyber / Vera Rubin Ultra</strong>：<strong>144 GPU</strong> 垂直排列，单 NVLink 域<br><strong>2028 · Feynman</strong>：TSMC <strong>1.6nm A16</strong>，新 CPU "Rosa"（致敬罗莎琳德·富兰克林），LP40 GPU，BlueField 5，CPO + 铜互联双路径</p>`},
+      {label:'万亿美元承诺', html:`<div class="qblock"><p>"I see through 2027 at least $1 trillion. Does it make any sense? That's what I'm going to spend the rest of the keynote explaining."</p><cite>— Jensen Huang · Blackwell + Vera Rubin 订单能见度，相比去年 $5000 亿翻番</cite></div>`}
+    ]
+  },
+  groq:{
+    icon:'⚡', title:'Groq LPU · 推理专用芯片', tag:'硬件层',
+    col1:[
+      {label:'史上最大收购', html:`<p class="d-text">2025 年 12 月，Nvidia 以约 <strong>$200 亿</strong>收购 Groq 核心资产，公司史上最大并购。Groq 创始人 <strong>Jonathan Ross</strong>（前 Google TPU 团队）及总裁 Sunny Madra 随之加入 Nvidia。<br><br><strong>Groq 3 LPU</strong>：Samsung 制造，已在产，<strong>Q3 2026 交付</strong>，一颗核心专门用于加速 GPU 吞吐量。</p>`},
+      {label:'机架规格', html:`<div class="chips"><span class="chip g">256 LPU / Groq 3 LPX 机架</span><span class="chip g">与 NVL72 机架并排部署</span><span class="chip">Q3 2026 交付</span><span class="chip">Samsung 制造</span></div>`}
+    ],
+    col2:[
+      {label:'性能提升', html:`<p class="d-text">Groq 3 LPX 与 NVL72 联合部署时，推理吞吐量每兆瓦提升最高 <strong>35 倍</strong>（智能体场景）。联合部署可在 1GW 工厂中实现约 <strong>$3000 亿</strong>年收益机会，是纯 GPU 方案的两倍。</p>`},
+      {label:'黄仁勋配置建议', html:`<div class="qblock"><p>"If your workload is primarily high throughput — use 100% Vera Rubin. If you have significant code generation or agentic needs — allocate roughly 25% of your data center to Groq."</p><cite>— Jensen Huang · GTC 2026 · GPU + LPU 双轨策略</cite></div>`}
+    ]
+  },
+  nvlink:{
+    icon:'🔗', title:'NVLink 互联 · AI 工厂神经系统', tag:'硬件层',
+    col1:[
+      {label:'NVLink 6 · Vera Rubin 核心', html:`<p class="d-text">Vera Rubin 平台集成 <strong>NVLink 6 Switch</strong>，Vera CPU 通过 <strong>NVLink-C2C</strong> 以 <strong>1.8 TB/s</strong> 相干带宽连接 Rubin GPU——整个 NVL72 系统作为"一台超级计算机"统一运行，无需外部互联协调。</p>`},
+      {label:'NVL72 完整芯片组成', html:`<div class="chips"><span class="chip g">72 Rubin GPU</span><span class="chip g">36 Vera CPU</span><span class="chip g">NVLink 6 Switch</span><span class="chip g">ConnectX-9 SuperNIC</span><span class="chip g">BlueField-4 DPU</span><span class="chip">Spectrum-6 以太网交换</span></div>`}
+    ],
+    col2:[
+      {label:'Kyber · 下一代机架架构（2027）', html:`<p class="d-text">计算托盘<strong>垂直排列</strong>（取代水平），<strong>144 GPU</strong> 组成单一 NVLink 域——更高密度，更低信号延迟。<br><br><strong>Feynman 时代（2028）</strong>：CPO（共封装光学）+ 铜互联<strong>双路径</strong>，支撑更大规模集群扩展，彻底解决数据中心互联瓶颈。</p>`},
+      {label:'组网扩展策略', html:`<p class="d-text">NVL72 机架通过 <strong>Quantum-X800 InfiniBand</strong> 或 <strong>Spectrum-X 以太网</strong>横向扩展，维持跨大规模 GPU 集群的高利用率，降低训练时间与总拥有成本（TCO）。</p>`}
+    ]
+  }
+};
+
+const LAYER_MAP={
+  physical:'app',digital:'app',consumer:'app',
+  openclaw:'agent',nemoclaw:'agent',
+  inference:'intel',training:'intel',
+  cuda:'platform',nemo:'platform',omniverse:'platform',
+  gpu:'hw',groq:'hw',nvlink:'hw'
+};
+
+let activeKey=null;
+
+function buildDetail(key){
+  const d=DATA[key];
+  if(!d)return'';
+  const renderCols=cols=>cols.map(s=>`
+    <div class="d-section">
+      <div class="d-label">${s.label}</div>
+      ${s.html}
+    </div>`).join('');
+  return `
+    <div class="detail-header">
+      <span class="d-icon">${d.icon}</span>
+      <span class="d-title">${d.title}</span>
+      <span class="d-tag">${d.tag}</span>
+    </div>
+    <div class="detail-body">
+      <div class="d-col">${renderCols(d.col1)}</div>
+      <div class="d-col">${renderCols(d.col2)}</div>
+    </div>`;
+}
+
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    const key=card.dataset.key;
+    const layerId=LAYER_MAP[key];
+    const wrap=document.getElementById(`detail-${layerId}`);
+    const inner=document.getElementById(`detail-${layerId}-inner`);
+    if(activeKey===key){
+      card.classList.remove('active');
+      wrap.classList.remove('open');
+      activeKey=null;
+      return;
+    }
+    document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('.detail-wrap').forEach(w=>w.classList.remove('open'));
+    card.classList.add('active');
+    inner.innerHTML=buildDetail(key);
+    wrap.classList.add('open');
+    activeKey=key;
+    setTimeout(()=>wrap.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
+  });
+});
+</script>
+</body>
+</html>
