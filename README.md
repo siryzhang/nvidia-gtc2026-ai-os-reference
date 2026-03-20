@@ -3,7 +3,7 @@
 > 基于 2026 年 3 月 16 日黄仁勋 GTC 主题演讲，整理的**交互式全栈架构参考**。覆盖 5 层架构、13 个核心模块，点击每个模块可展开来自官方 Newsroom、CNBC、Tom's Hardware 等权威来源的详情。
 
 <!-- 部署 GitHub Pages 后，将下方链接替换为你的实际地址 -->
-**→ [在线访问 Live Demo](#)**
+**→ [在线访问 Live Demo](https://siryzhang.github.io/nvidia-gtc2026-ai-os-reference/)**
 
 ---
 
@@ -47,19 +47,6 @@
 
 ---
 
-## 本地运行
-
-```bash
-# 直接用浏览器打开即可，无需安装任何依赖
-open nvidia_gtc2026_ai_os_reference.html
-
-# 或启动本地服务器
-npx serve .
-python3 -m http.server 8080
-```
-
----
-
 ## 数据来源
 
 所有详情内容经以下来源交叉核实：
@@ -70,16 +57,6 @@ python3 -m http.server 8080
 - [Data Center Knowledge](https://www.datacenterknowledge.com/data-center-chips/gtc-2026-nvidia-unveils-vera-rubin-ai-platform-eyes-1t-by-2027) — Vera Rubin 技术深度解析
 - [Tom's Hardware](https://www.tomshardware.com/news/live/nvidia-gtc-2026-keynote-live-blog-jensen-huang) — GTC 2026 现场实时博客
 - [The GPU.ai](https://thegpu.ai/p/nvidia-gtc-2026-full-breakdown) — 完整技术规格拆解
-
----
-
-## 部署到 GitHub Pages
-
-1. 将仓库设置为 **Public**
-2. 进入 **Settings → Pages**
-3. Source 选择 `main` 分支，根目录 `/`
-4. 保存后约 1 分钟即可通过 `https://你的用户名.github.io/仓库名` 访问
-5. 将访问地址填入本文件顶部的 Live Demo 链接
 
 ---
 
